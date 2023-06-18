@@ -5,3 +5,51 @@ SHELL := /bin/bash
 help:
 	@printf "available targets -->\n\n"
 	@cat Makefile | grep ".PHONY" | grep -v ".PHONY: _" | sed 's/.PHONY: //g'
+
+
+env.sh:
+	wget https://raw.githubusercontent.com/daxxog/envsubst-mustache/caaf2b3ee50e7e1d64a6dfca0b3ef44473c24437/env.sh
+
+
+.gitignore:
+	echo '/env/' > .gitignore
+
+
+.python-version:
+	curl -sL \
+		https://raw.githubusercontent.com/docker-library/python/master/3.$$( \
+			curl -sL \
+				https://raw.githubusercontent.com/docker-library/python/master/versions.json \
+				| yq keys -o tsv \
+				| tr '\t' '\n' \
+				| grep -v rc \
+				| grep '3.' \
+				| sed 's/3\.//g' \
+				| sort -n \
+				| tail -n 1 \
+		)/bullseye/Dockerfile \
+		| grep PYTHON_VERSION \
+		| head -n 1 \
+		| sed 's/ENV PYTHON_VERSION//g; s/ //g' \
+		| tee .python-version \
+	;
+
+
+env: env.sh .python-version requirements.dev.txt .gitignore
+	bash -c 'source env.sh'
+
+
+requirements.dev.in:
+	echo pip-tools > requirements.dev.in
+
+
+requirements.dev.txt: requirements.dev.in env.sh .python-version
+	if [ ! -d env ]; then \
+		bash <(cat env.sh | grep -v 'requirements.dev.txt') \
+		&& bash -c 'source env/bin/activate && set -x && which python3 && python3 -m pip install -r requirements.dev.in' \
+		&& bash -c 'source env/bin/activate && set -x && pip-compile --generate-hashes --resolver=backtracking requirements.dev.in' \
+		&& rm -rf env; \
+	else \
+		echo please remove the env folder before bootstrapping requirements.dev.txt; \
+		exit 1; \
+	fi
