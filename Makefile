@@ -41,11 +41,12 @@ env: env.sh .python-version requirements.dev.txt .gitignore
 
 requirements.dev.in:
 	echo pip-tools > requirements.dev.in
+	echo poetry >> requirements.dev.in
 
 
 requirements.dev.txt: requirements.dev.in env.sh .python-version
 	if [ ! -d env ]; then \
-		bash <(cat env.sh | grep -v 'requirements.dev.txt') \
+		bash <(cat env.sh | grep -v 'requirements.dev.txt' | grep -v 'poetry install') \
 		&& bash -c 'source env/bin/activate && set -x && which python3 && python3 -m pip install -r requirements.dev.in' \
 		&& bash -c 'source env/bin/activate && set -x && pip-compile --generate-hashes --resolver=backtracking requirements.dev.in' \
 		&& rm -rf env; \
@@ -53,3 +54,7 @@ requirements.dev.txt: requirements.dev.in env.sh .python-version
 		echo please remove the env folder before bootstrapping requirements.dev.txt; \
 		exit 1; \
 	fi
+
+
+poetry.lock: env pyproject.toml
+	bash -c 'source env.sh && set -x && poetry install'

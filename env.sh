@@ -8,6 +8,7 @@ if [ ! -d env ]; then
     source env/bin/activate
     env/bin/pip install --upgrade pip setuptools wheel
     env/bin/pip install -r requirements.dev.txt
+    env/bin/poetry install
 else
     source env/bin/activate
 fi
