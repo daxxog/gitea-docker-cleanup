@@ -1,13 +1,13 @@
 import typer
 
+app = typer.Typer()
 
-def cli(name: str):
+
+@app.command()
+def hello(name: str):
     print(f"Hello {name}")
 
 
-def main():
-    typer.run(cli)
-
-
+main = app
 if __name__ == "__main__":
     main()
