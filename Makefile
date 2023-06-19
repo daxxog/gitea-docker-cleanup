@@ -66,3 +66,23 @@ swagger/gitea:
 
 swagger/gitea/swagger.v1.json: swagger/gitea
 	curl -sL https://try.gitea.io/swagger.v1.json > ./swagger/gitea/swagger.v1.json
+
+
+openapi:
+	mkdir -p openapi
+
+
+openapi/gitea.yaml: openapi swagger/gitea/swagger.v1.json
+	podman run \
+		-i \
+		-t \
+		--entrypoint /usr/local/openjdk-11/bin/java \
+		-v "$$(pwd)/openapi":/mnt/openapi \
+		-v "$$(pwd)/swagger":/mnt/swagger \
+		openapitools/openapi-generator-cli:v6.6.0 \
+		-jar /opt/openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar \
+		generate \
+		-g openapi-yaml \
+		-i /mnt/swagger/gitea/swagger.v1.json \
+		-o /mnt/openapi/gitea.yaml \
+	;
