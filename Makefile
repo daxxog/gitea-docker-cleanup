@@ -58,3 +58,11 @@ requirements.dev.txt: requirements.dev.in env.sh .python-version
 
 poetry.lock: env pyproject.toml
 	bash -c 'source env.sh && set -x && poetry install'
+
+
+swagger/gitea:
+	mkdir -p ./swagger/gitea
+
+
+swagger/gitea/swagger.v1.json: swagger/gitea
+	curl -sL https://try.gitea.io/swagger.v1.json > ./swagger/gitea/swagger.v1.json
