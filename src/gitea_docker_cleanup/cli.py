@@ -1,5 +1,12 @@
+import typer
+
+
+def cli(name: str):
+    print(f"Hello {name}")
+
+
 def main():
-    print("Hello World!")
+    typer.run(cli)
 
 
 if __name__ == "__main__":

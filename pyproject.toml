@@ -20,6 +20,7 @@ gitea-docker-cleanup = "gitea_docker_cleanup.cli:main"
 python = "^3.11"
 
 pydantic = "*"
+typer = { version = "*", extras = ["all"] }
 
 [tool.poetry.dev-dependencies]
 datamodel-code-generator = "*"
