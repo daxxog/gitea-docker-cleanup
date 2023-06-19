@@ -60,6 +60,11 @@ poetry.lock: env pyproject.toml
 	bash -c 'source env.sh && set -x && poetry install'
 
 
+.PHONY: lint
+lint: env .pre-commit-config.yaml
+	bash -c 'source env.sh && lint'
+
+
 swagger/gitea:
 	mkdir -p ./swagger/gitea
 

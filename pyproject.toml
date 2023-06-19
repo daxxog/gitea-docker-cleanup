@@ -24,6 +24,17 @@ pydantic = "*"
 [tool.poetry.dev-dependencies]
 datamodel-code-generator = "*"
 
+# linters and neovim integration
+pynvim = "*"
+neovim = "*"
+jedi = "*"
+pudb = "*"
+black = "*"
+isort = "*"
+flake8 = "*"
+bandit = "*"
+pre-commit = "*"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
