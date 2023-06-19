@@ -86,3 +86,11 @@ openapi/gitea.yaml: openapi swagger/gitea/swagger.v1.json
 		-i /mnt/swagger/gitea/swagger.v1.json \
 		-o /mnt/openapi/gitea.yaml \
 	;
+
+
+src/gitea_docker_cleanup/models:
+	mkdir -p ./src/gitea_docker_cleanup/models
+
+
+src/gitea_docker_cleanup/models/gitea.py: openapi/gitea.yaml env src/gitea_docker_cleanup/models
+	bash -c 'source env.sh && set -x && datamodel-codegen --input openapi/gitea.yaml/openapi/openapi.yaml > src/gitea_docker_cleanup/models/gitea.py'

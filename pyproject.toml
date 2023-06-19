@@ -19,6 +19,11 @@ gitea-docker-cleanup = "gitea_docker_cleanup.cli:main"
 [tool.poetry.dependencies]
 python = "^3.11"
 
+pydantic = "*"
+
+[tool.poetry.dev-dependencies]
+datamodel-code-generator = "*"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
